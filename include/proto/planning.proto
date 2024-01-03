@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package protocol.apollo.planning.V1;
+option java_package = "com.topxgun.protocol.apollo.planning.V1";
+option java_outer_classname = "ProtoPlanning";
+
+/**
+    位置点定义
+*/
+message Point {
+  double x = 1; // 右为正方向，单位无关
+  double y = 2; // 上为正方向
+}
+
+/**
+    多边形区域定义
+*/
+message Polygon {
+  repeated Point vertex = 1; // 多边形的顶点
+}
+
+/**
+    地块边界集合，包含障碍区
+*/
+message Borders {
+  Polygon borders = 1;                    // 地块边界点集合
+  repeated Polygon obstacle_polygons = 2; // 多边形障碍区
+}
+
+/**
+    地块规划任务综合参数
+*/
+message PathPlanParam {
+  Borders work_area = 1;  // 地块信息
+  double wp_heading = 2;  // 工作航线方向
+  double wp_interval = 3; // 工作航线间隔
+  double wp_offset = 4; // 工作航线初始偏置
+  Point wp_start = 5;     // 起始点
+  bool wp_preview = 6; // 快速预览
+}
+
+/**
+    航点定义
+*/
+message RoutePoint {
+  enum RouteType {
+    NORMAL_START = 0;
+    NORMAL_END = 1;
+    TRANSITION = 2;
+    DETOUR = 3;
+  }
+
+  enum BorderType {
+    FARM_BORDER = 0;
+    OBSTACLE_POLYGON_BORDER = 1;
+    OBSTACLE_CIRCLE_BORDER = 2;
+  }
+
+  Point p = 1;              // 该点的位置
+  RouteType route_type = 2; // 该点所属航线类型（使用起点关联航段属性）
+  int32 route_id = 3;                 // 该点所属作业航线ID
+  BorderType crossed_border_type = 4; // 与该点相交的边界类型
+  int32 crossed_border_id = 5;        // 与该点相交的边界线段ID
+}
+
+/**
+    规划完成的航点集合
+*/
+message RoutePointsPlanned {
+  repeated RoutePoint wps = 1; // 规划完成的航点
+}
