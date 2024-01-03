@@ -52,7 +52,7 @@ void Route_2::CollectPivotalTrackCandidate(const std::vector<Segment> &sorted_tr
     int num_0 = track_hist[i - 1].size();
     int num_1 = track_hist[i].size();
     int num_2 = track_hist[i + 1].size();
-    if (num_1 < num_0 or num_1 < num_2)
+    if (num_1 < num_0 || num_1 < num_2)
       out.insert(out.end(), track_hist[i].begin(), track_hist[i].end());
   }
 
@@ -86,6 +86,7 @@ void Route_2::DivideTracksIntoCells(std::vector<Segment> &          tracks,
     }
     cell.SortTracks();
 
+    // note: check if front/back track is pivotal
     if (!cell.sorted_tracks_.empty() &&
         std::find_if(pivotal_track_candidates.begin(), pivotal_track_candidates.end(), [&](const Segment &seg) {
           return bg::equals(cell.sorted_tracks_.front(), seg);
