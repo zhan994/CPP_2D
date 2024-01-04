@@ -21,7 +21,7 @@
 
 class Vis_2 {
   public:
-  Vis_2(std::string prefix = "/home/zhan/test_planning");
+  Vis_2(std::string prefix = "./test");
 
   /**
    * \brief 新建数据

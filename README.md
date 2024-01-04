@@ -16,8 +16,6 @@
    sudo apt install gnuplot
    ```
 
-3. `protobuf-3.4.0`
-
 ## Build
 
 ```bash

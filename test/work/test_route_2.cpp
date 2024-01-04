@@ -34,11 +34,10 @@ int main()
   double rotation = 0.;
   double interval = 2;
   double offset   = 0.3;
-  bool   preview  = false;
 
   Route_2 route;
   route.SetWork(outline, holes);
-  route.SetParam(start_pt, rotation, interval, offset, preview);
+  route.SetParam(start_pt, rotation, interval, offset);
 
   std::vector<Point>        path;
   std::vector<WaypointType> types;

@@ -1,6 +1,6 @@
 #include "work/route_2.h"
 
-Route_2::Route_2() : status_(true)
+Route_2::Route_2()
 {}
 
 void Route_2::SetWork(const std::vector<Point> &outline, const std::vector<std::vector<Point>> &holes)
@@ -19,13 +19,12 @@ void Route_2::SetWork(const std::vector<Point> &outline, const std::vector<std::
   work_.SetPolygon(outline_, holes_);
 }
 
-void Route_2::SetParam(const Point &start_pt, double rotation, double interval, double offset, bool preview)
+void Route_2::SetParam(const Point &start_pt, double rotation, double interval, double offset)
 {
   start_pt_ = Point(start_pt.x() - origin_pt_.x(), start_pt.y() - origin_pt_.y());
   rotation_ = rotation; // deg
   interval_ = interval;
   offset_   = offset;
-  preview_  = preview;
 }
 
 void Route_2::CollectPivotalTrackCandidate(const std::vector<Segment> &sorted_tracks, std::vector<Segment> &out)
@@ -118,7 +117,7 @@ void Route_2::DivideTracksIntoCells(std::vector<Segment> &          tracks,
 
     if (!cell.sorted_tracks_.empty())
     {
-      cell.GetPaths(work_, preview_);
+      cell.GetPaths(work_);
       out.push_back(cell);
     }
   }
@@ -128,7 +127,7 @@ void Route_2::DivideTracksIntoCells(std::vector<Segment> &          tracks,
     // std::cout << "pivo: " << String_2::SegmentToString(track) << std::endl;
     Cell_2 cell;
     cell.AddTrack(track);
-    cell.GetPaths(work_, preview_);
+    cell.GetPaths(work_);
     out.push_back(cell);
     tracks.erase(
         std::remove_if(tracks.begin(), tracks.end(), [&](const Segment &seg) { return bg::equals(track, seg); }),
@@ -172,17 +171,11 @@ void Route_2::GetStartCellIndex(
 
 void Route_2::PlanWithRotation(std::vector<Point> &path, std::vector<WaypointType> &types, std::vector<int> &line_nums)
 {
-  // Stop();
-  if (!status_)
-    return;
   work_.RotateIt(rotation_);
   Point center = work_.GetCenter();
   start_pt_    = TF_2::Rotate(start_pt_, center, rotation_);
 
   auto t1 = std::chrono::steady_clock::now();
-  // Stop();
-  if (!status_)
-    return;
 
   std::vector<Segment> tracks;
   double               start_x = work_.GetTracks(start_pt_, interval_, offset_, tracks);
@@ -197,20 +190,14 @@ void Route_2::PlanWithRotation(std::vector<Point> &path, std::vector<WaypointTyp
   std::cout << " zones size: " << zones.size() << std::endl;
 
   auto t3 = std::chrono::steady_clock::now();
-  // Stop();
-  if (!status_)
-    return;
 
   std::vector<Cell_2> cells;
   DivideTracksIntoCells(tracks, zones, cells);
   std::cout << " cells size: " << cells.size() << std::endl;
 
   auto t4 = std::chrono::steady_clock::now();
-  // Stop();
-  if (!status_)
-    return;
 
-  dfs_ = DFS_2(work_, cells, 10000, 25, preview_);
+  dfs_ = DFS_2(work_, cells, 10000, 25);
   size_t sci, sni;
   GetStartCellIndex(cells, start_pt_, start_x, sci, sni);
   // Stop();
@@ -269,10 +256,4 @@ void Route_2::GetLineNums(const std::vector<Point> &       path,
       line_nums.push_back(-1);
     }
   }
-}
-
-void Route_2::Stop()
-{
-  status_ = false;
-  dfs_.Stop();
 }

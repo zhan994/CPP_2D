@@ -1,18 +1,16 @@
 #include "work/dfs_2.h"
 
-DFS_2::DFS_2() : status_(true)
+DFS_2::DFS_2()
 {}
 
-DFS_2::DFS_2(const Work_2 &work, const std::vector<Cell_2> &cells, int max_cost, int cells_threshold, bool preview)
+DFS_2::DFS_2(const Work_2 &work, const std::vector<Cell_2> &cells, int max_cost, int cells_threshold)
     : work_(work),
       cells_(cells),
       N_(cells.size()),
       max_cost_(max_cost),
       cells_threshold_(cells_threshold),
-      preview_(preview),
       cost_(0),
-      best_solution_weight_(std::numeric_limits<double>::max()),
-      status_(true)
+      best_solution_weight_(std::numeric_limits<double>::max())
 {
   visited_.resize(N_, false);
   edge_weights_.clear();
@@ -56,7 +54,7 @@ double DFS_2::ComputeWeight(size_t ci1, size_t ni1, size_t ci2, size_t ni2)
   double path_len = 0.0;
   // note: <opti> time cost due to complex cells
   // note: add preview mode
-  bool simplified = N_ > cells_threshold_ || preview_;
+  bool simplified = N_ > cells_threshold_;
   path_len = simplified ? bg::distance(node1_end, node2_start) : work_.ShortestPath(node1_end, node2_start, path);
   // std::cout << ci1 << " " << ni1 << ", " << ci2 << " " << ni2 << ", " << String_2::PointToString(node1_end) << " "
   //           << String_2::PointToString(node2_start) << ", " << path_len << std::endl;
@@ -86,9 +84,6 @@ void DFS_2::FindMinimunPath(
 
 void DFS_2::DFS(size_t cur_ci, size_t cur_ni, std::vector<std::pair<size_t, size_t>> &path, double current_weight)
 {
-  if (!status_)
-    return;
-
   if (cost_ >= max_cost_)
     return;
 
@@ -184,17 +179,8 @@ void DFS_2::TranslatePath(double interval, std::vector<Point> &path_out, std::ve
 
     std::vector<Point> connect_path;
     double             connect_length = 0.0;
-    // note: add preview mode, simplify all path
-    if (preview_)
-    {
-      connect_path.push_back(cur_path.back());
-      connect_path.push_back(next_path.front());
-      connect_length = bg::distance(cur_path.back(), next_path.front());
-    } else
-    {
-      connect_length = work_.ShortestPath(cur_path.back(), next_path.front(), connect_path);
-    }
 
+    connect_length = work_.ShortestPath(cur_path.back(), next_path.front(), connect_path);
     connect_path.assign(connect_path.begin() + 1, connect_path.end() - 1);
     path_out.insert(path_out.end(), connect_path.begin(), connect_path.end());
     path_out.insert(path_out.end(), next_path.begin(), next_path.end());
@@ -281,9 +267,4 @@ std::string DFS_2::GetCellConnectionType(const std::vector<Point> &cur_path,
   }
 
   return "transition";
-}
-
-void DFS_2::Stop()
-{
-  status_ = false;
 }

@@ -40,9 +40,8 @@ class Route_2 {
    * \param rotation 旋转角度
    * \param interval 行距
    * \param offset 起始偏置
-   * \param preview 预览
    */
-  void SetParam(const Point &start_pt, double rotation, double interval, double offset, bool preview);
+  void SetParam(const Point &start_pt, double rotation, double interval, double offset);
 
   /**
    * \brief 规划
@@ -52,12 +51,6 @@ class Route_2 {
    * \param line_nums 输出路径编号
    */
   void PlanWithRotation(std::vector<Point> &path, std::vector<WaypointType> &types, std::vector<int> &line_nums);
-
-  /**
-   * \brief 终止dfs
-   * 
-   */
-  void Stop();
 
   private:
   /**
@@ -110,7 +103,6 @@ class Route_2 {
   double rotation_;
   double interval_;
   double offset_;
-  bool   preview_, status_;
 };
 
 #endif // WORK_ROUTE_2_H

@@ -29,9 +29,8 @@ class DFS_2 {
    * \param cells
    * \param max_cost
    * \param cells_threshold
-   * \param preview
    */
-  DFS_2(const Work_2 &work, const std::vector<Cell_2> &cells, int max_cost, int cells_threshold, bool preview);
+  DFS_2(const Work_2 &work, const std::vector<Cell_2> &cells, int max_cost, int cells_threshold);
 
   /**
    * \brief 求最优路径
@@ -44,12 +43,6 @@ class DFS_2 {
    */
   void FindMinimunPath(
       size_t sci, size_t sni, double interval, std::vector<Point> &path_out, std::vector<WaypointType> &wp_types_out);
-
-  /**
-   * \brief 终止dfs
-   *
-   */
-  void Stop();
 
   private:
   /**
@@ -117,7 +110,6 @@ class DFS_2 {
   Work_2              work_;
   std::vector<Cell_2> cells_;
   int                 N_, cells_threshold_;
-  bool                preview_;
   int                 max_cost_, cost_;
   std::vector<bool>   visited_;
 
@@ -128,8 +120,6 @@ class DFS_2 {
   double best_solution_weight_;
   // first cell_index, second node_index
   std::vector<std::pair<size_t, size_t>> best_path_;
-
-  bool status_;
 };
 
 #endif // WORK_DFS_2_H
