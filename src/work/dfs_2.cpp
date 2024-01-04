@@ -53,7 +53,6 @@ double DFS_2::ComputeWeight(size_t ci1, size_t ni1, size_t ci2, size_t ni2)
 
   double path_len = 0.0;
   // note: <opti> time cost due to complex cells
-  // note: add preview mode
   bool simplified = N_ > cells_threshold_;
   path_len = simplified ? bg::distance(node1_end, node2_start) : work_.ShortestPath(node1_end, node2_start, path);
   // std::cout << ci1 << " " << ni1 << ", " << ci2 << " " << ni2 << ", " << String_2::PointToString(node1_end) << " "
