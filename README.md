@@ -2,7 +2,7 @@
 
 ***Simple 2D Coverage Path Planning (CPP) for UAVs.***
 
-![](test/work/test_work_route_2.png)
+![](test/work/test_cpp_2d.png)
 
 ## Dependencies
 
