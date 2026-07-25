@@ -1,5 +1,5 @@
 /**
- * \file test_route_2.cpp
+ * \file test_route.cpp
  * \author Zhihao Zhan (zhanzhihao_dt@163.com)
  * \brief 2d 航线规划相关功能测试
  * \version 0.1
@@ -10,12 +10,12 @@
  */
 
 #include <iostream>
-#include "work/route_2.h"
-#include "visualization/vis_2.h"
+#include "work/cpp_2d.h"
+#include "visualization/vis.h"
 
 int main()
 {
-  Vis_2 vis;
+  Vis vis;
   vis.Clear();
 
   // std::vector<Point>              outline = {Point(0., 0.),  Point(10., 0.),  Point(10., 5.), Point(8., 7.),
@@ -35,7 +35,7 @@ int main()
   double interval = 2;
   double offset   = 0.3;
 
-  Route_2 route;
+  CPP_2D route;
   route.SetWork(outline, holes);
   route.SetParam(start_pt, rotation, interval, offset);
 

@@ -1,6 +1,6 @@
-#include "visualization/vis_2.h"
+#include "visualization/vis.h"
 
-Vis_2::Vis_2(std::string prefix) : prefix_(prefix)
+Vis::Vis(std::string prefix) : prefix_(prefix)
 {
   if (!IsDirExist(prefix_))
   {
@@ -12,22 +12,22 @@ Vis_2::Vis_2(std::string prefix) : prefix_(prefix)
   }
 }
 
-bool Vis_2::IsDirExist(const std::string &path_name)
+bool Vis::IsDirExist(const std::string &path_name)
 {
   return boost::filesystem::exists(path_name) && boost::filesystem::is_directory(path_name);
 }
 
-bool Vis_2::CreateNewDir(const std::string &path_name)
+bool Vis::CreateNewDir(const std::string &path_name)
 {
   return boost::filesystem::create_directories(path_name);
 }
 
-bool Vis_2::IsFileExist(const std::string &file_name)
+bool Vis::IsFileExist(const std::string &file_name)
 {
   return boost::filesystem::exists(file_name) && boost::filesystem::is_regular_file(file_name);
 }
 
-void Vis_2::NewFile(std::string label, const Polygon &data, std::string color)
+void Vis::NewFile(std::string label, const Polygon &data, std::string color)
 {
   std::string   data_file_name = prefix_ + "/" + label + "_" + "polygon" + ".data";
   std::ofstream data_file;
@@ -64,7 +64,7 @@ void Vis_2::NewFile(std::string label, const Polygon &data, std::string color)
   data_file.close();
 }
 
-void Vis_2::NewFile(std::string label, const std::vector<Polygon> &data, std::string color)
+void Vis::NewFile(std::string label, const std::vector<Polygon> &data, std::string color)
 {
   std::string   data_file_name = prefix_ + "/" + label + "_" + "holes" + ".data";
   std::ofstream data_file;
@@ -104,7 +104,7 @@ void Vis_2::NewFile(std::string label, const std::vector<Polygon> &data, std::st
   data_file.close();
 }
 
-void Vis_2::NewFile(std::string label, const std::vector<Segment> &data, std::string color)
+void Vis::NewFile(std::string label, const std::vector<Segment> &data, std::string color)
 {
   std::string   data_file_name = prefix_ + "/" + label + "_" + "segment" + ".data";
   std::ofstream data_file;
@@ -139,7 +139,7 @@ void Vis_2::NewFile(std::string label, const std::vector<Segment> &data, std::st
   data_file.close();
 }
 
-void Vis_2::NewFile(std::string label, const std::vector<Point> &data, std::string color)
+void Vis::NewFile(std::string label, const std::vector<Point> &data, std::string color)
 {
   std::string data_file_name = prefix_ + "/" + label + "_" + "point" + ".data";
 
@@ -173,7 +173,7 @@ void Vis_2::NewFile(std::string label, const std::vector<Point> &data, std::stri
   data_file.close();
 }
 
-void Vis_2::Show()
+void Vis::Show()
 {
   std::string   gnu_plot_script_name = prefix_ + '/' + "plot.gnu";
   std::ofstream gnu_plot_script(gnu_plot_script_name);
@@ -197,9 +197,9 @@ void Vis_2::Show()
 
       if (is_start_show)
       {
-        is_start_show = false;
-        polygon_script =
-            "plot '" + data_file_name + "' with line linewidth 0.5 lc rgb '" + color + "' title'" + polygon_fn_[i] + "'";
+        is_start_show  = false;
+        polygon_script = "plot '" + data_file_name + "' with line linewidth 0.5 lc rgb '" + color + "' title'" +
+                         polygon_fn_[i] + "'";
       } else
       {
         polygon_script =
@@ -266,9 +266,9 @@ void Vis_2::Show()
 
       if (is_start_show)
       {
-        is_start_show = false;
-        segment_script =
-            "plot '" + data_file_name + "' with line linewidth 0.5 lc rgb '" + color + "' title'" + segment_fn_[i] + "'";
+        is_start_show  = false;
+        segment_script = "plot '" + data_file_name + "' with line linewidth 0.5 lc rgb '" + color + "' title'" +
+                         segment_fn_[i] + "'";
       } else
       {
         segment_script =
@@ -285,7 +285,7 @@ void Vis_2::Show()
   system(command.c_str());
 }
 
-void Vis_2::Clear()
+void Vis::Clear()
 {
   polygon_fn_.clear();
   polygon_color_.clear();

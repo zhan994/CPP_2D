@@ -1,5 +1,5 @@
 /**
- * \file string_2.h
+ * \file string.h
  * \author Zhihao Zhan (zhanzhihao_dt@163.com)
  * \brief 2d 几何 字符串
  * \version 0.1
@@ -9,28 +9,28 @@
  *
  */
 
-#ifndef GEOMETRY_STRING_2_H
-#define GEOMETRY_STRING_2_H
+#ifndef GEOMETRY_STRING_H
+#define GEOMETRY_STRING_H
 
 #include "bg.h"
 
-class String_2 {
+class String {
   public:
   /**
    * \brief 点转字符串
-   * 
-   * \param pt 
-   * \return std::string 
+   *
+   * \param pt
+   * \return std::string
    */
   static std::string PointToString(const Point &pt);
 
   /**
    * \brief 线段转字符串
-   * 
-   * \param seg 
-   * \return std::string 
+   *
+   * \param seg
+   * \return std::string
    */
   static std::string SegmentToString(const Segment &seg);
 };
 
-#endif // GEOMETRY_STRING_2_H
+#endif // GEOMETRY_STRING_H

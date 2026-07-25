@@ -1,6 +1,6 @@
-#include "geometry/utility_2.h"
+#include "geometry/utility.h"
 
-Segment Utility_2::MergeVerticalSegments(const Segment &seg1, const Segment &seg2)
+Segment Utility::MergeVerticalSegments(const Segment &seg1, const Segment &seg2)
 {
   double x = seg1.first.x();
 
@@ -16,7 +16,7 @@ Segment Utility_2::MergeVerticalSegments(const Segment &seg1, const Segment &seg
   return Segment(Point(x, y_min), Point(x, y_max));
 }
 
-bool Utility_2::CompPoint(const Point &pt1, const Point &pt2)
+bool Utility::CompPoint(const Point &pt1, const Point &pt2)
 {
   double eps = 1e-6;
 
@@ -42,7 +42,7 @@ bool Utility_2::CompPoint(const Point &pt1, const Point &pt2)
   return false;
 }
 
-bool Utility_2::CompSegment(const Segment &seg1, const Segment &seg2)
+bool Utility::CompSegment(const Segment &seg1, const Segment &seg2)
 {
   double eps = 1e-6;
 
@@ -86,7 +86,7 @@ bool Utility_2::CompSegment(const Segment &seg1, const Segment &seg2)
   return false;
 }
 
-Polygon Utility_2::SetData(const std::vector<Point> &data)
+Polygon Utility::SetData(const std::vector<Point> &data)
 {
   Polygon ret;
   for (const auto &pt : data) ret.outer().push_back(pt);
@@ -97,7 +97,7 @@ Polygon Utility_2::SetData(const std::vector<Point> &data)
   return ret;
 }
 
-double Utility_2::DRound(double dval, int n)
+double Utility::DRound(double dval, int n)
 {
   char  l_fmtp[32], l_buf[64];
   char *p_str;

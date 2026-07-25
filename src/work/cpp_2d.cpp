@@ -1,25 +1,25 @@
-#include "work/route_2.h"
+#include "work/cpp_2d.h"
 
-Route_2::Route_2()
+CPP_2D::CPP_2D()
 {}
 
-void Route_2::SetWork(const std::vector<Point> &outline, const std::vector<std::vector<Point>> &holes)
+void CPP_2D::SetWork(const std::vector<Point> &outline, const std::vector<std::vector<Point>> &holes)
 {
   outline_   = outline;
   holes_     = holes;
   origin_pt_ = outline[0];
 
   for (auto &pt : outline_)
-    pt = Point(Utility_2::DRound(pt.x() - origin_pt_.x(), 6), Utility_2::DRound(pt.y() - origin_pt_.y(), 6));
+    pt = Point(Utility::DRound(pt.x() - origin_pt_.x(), 6), Utility::DRound(pt.y() - origin_pt_.y(), 6));
 
   for (auto &hole : holes_)
     for (auto &pt : hole)
-      pt = Point(Utility_2::DRound(pt.x() - origin_pt_.x(), 6), Utility_2::DRound(pt.y() - origin_pt_.y(), 6));
+      pt = Point(Utility::DRound(pt.x() - origin_pt_.x(), 6), Utility::DRound(pt.y() - origin_pt_.y(), 6));
 
   work_.SetPolygon(outline_, holes_);
 }
 
-void Route_2::SetParam(const Point &start_pt, double rotation, double interval, double offset)
+void CPP_2D::SetParam(const Point &start_pt, double rotation, double interval, double offset)
 {
   start_pt_ = Point(start_pt.x() - origin_pt_.x(), start_pt.y() - origin_pt_.y());
   rotation_ = rotation; // deg
@@ -27,7 +27,7 @@ void Route_2::SetParam(const Point &start_pt, double rotation, double interval, 
   offset_   = offset;
 }
 
-void Route_2::CollectPivotalTrackCandidate(const std::vector<Segment> &sorted_tracks, std::vector<Segment> &out)
+void CPP_2D::CollectPivotalTrackCandidate(const std::vector<Segment> &sorted_tracks, std::vector<Segment> &out)
 {
   std::vector<std::vector<Segment>> track_hist;
   double                            prev_x;
@@ -56,12 +56,12 @@ void Route_2::CollectPivotalTrackCandidate(const std::vector<Segment> &sorted_tr
   }
 
   // std::cout << "candi" << std::endl;
-  // for (const auto &can : out) std::cout << String_2::SegmentToString(can) << std::endl;
+  // for (const auto &can : out) std::cout << String::SegmentToString(can) << std::endl;
 }
 
-void Route_2::DivideTracksIntoCells(std::vector<Segment> &          tracks,
-                                    const std::vector<Trapezoid_2> &zones,
-                                    std::vector<Cell_2> &           out)
+void CPP_2D::DivideTracksIntoCells(std::vector<Segment> &        tracks,
+                                   const std::vector<Trapezoid> &zones,
+                                   std::vector<Cell> &           out)
 {
   std::vector<Segment> pivotal_tracks;
   std::vector<Segment> pivotal_track_candidates;
@@ -70,7 +70,7 @@ void Route_2::DivideTracksIntoCells(std::vector<Segment> &          tracks,
 
   for (const auto &zone : zones)
   {
-    Cell_2 cell;
+    Cell cell;
     for (const auto &track : tracks)
     {
       double x = track.first.x();
@@ -107,7 +107,7 @@ void Route_2::DivideTracksIntoCells(std::vector<Segment> &          tracks,
     // std::cout << "add pivotal" << std::endl;
     // for (const auto &track : cell.sorted_tracks_)
     // {
-    //   std::cout << String_2::SegmentToString(track) << std::endl;
+    //   std::cout << String::SegmentToString(track) << std::endl;
     // }
 
     for (const auto &track : cell.sorted_tracks_)
@@ -124,8 +124,8 @@ void Route_2::DivideTracksIntoCells(std::vector<Segment> &          tracks,
 
   for (const auto &track : pivotal_tracks)
   {
-    // std::cout << "pivo: " << String_2::SegmentToString(track) << std::endl;
-    Cell_2 cell;
+    // std::cout << "pivo: " << String::SegmentToString(track) << std::endl;
+    Cell cell;
     cell.AddTrack(track);
     cell.GetPaths(work_);
     out.push_back(cell);
@@ -139,19 +139,19 @@ void Route_2::DivideTracksIntoCells(std::vector<Segment> &          tracks,
     std::cout << "Error: tracks remained." << std::endl;
     for (const auto &track : tracks)
     {
-      std::cout << String_2::SegmentToString(track) << std::endl;
+      std::cout << String::SegmentToString(track) << std::endl;
     }
     out.clear();
   }
 }
 
-void Route_2::GetStartCellIndex(
-    const std::vector<Cell_2> &cells, const Point &start_point, double start_x, size_t &sci, size_t &sni)
+void CPP_2D::GetStartCellIndex(
+    const std::vector<Cell> &cells, const Point &start_point, double start_x, size_t &sci, size_t &sni)
 {
   double closest_dist = std::numeric_limits<double>::max();
   for (size_t i = 0; i < cells.size(); ++i)
   {
-    Cell_2 cell = cells[i];
+    Cell cell = cells[i];
     for (size_t j = 0; j < cell.NumNodes(); ++j)
     {
       Point cell_start = cell.paths_[j][0];
@@ -169,11 +169,11 @@ void Route_2::GetStartCellIndex(
   }
 }
 
-void Route_2::PlanWithRotation(std::vector<Point> &path, std::vector<WaypointType> &types, std::vector<int> &line_nums)
+void CPP_2D::PlanWithRotation(std::vector<Point> &path, std::vector<WaypointType> &types, std::vector<int> &line_nums)
 {
   work_.RotateIt(rotation_);
   Point center = work_.GetCenter();
-  start_pt_    = TF_2::Rotate(start_pt_, center, rotation_);
+  start_pt_    = TF::Rotate(start_pt_, center, rotation_);
 
   auto t1 = std::chrono::steady_clock::now();
 
@@ -185,19 +185,19 @@ void Route_2::PlanWithRotation(std::vector<Point> &path, std::vector<WaypointTyp
     return;
   auto t2 = std::chrono::steady_clock::now();
 
-  std::vector<Trapezoid_2> zones;
+  std::vector<Trapezoid> zones;
   work_.GetMonotoneZones(start_pt_, zones);
   std::cout << " zones size: " << zones.size() << std::endl;
 
   auto t3 = std::chrono::steady_clock::now();
 
-  std::vector<Cell_2> cells;
+  std::vector<Cell> cells;
   DivideTracksIntoCells(tracks, zones, cells);
   std::cout << " cells size: " << cells.size() << std::endl;
 
   auto t4 = std::chrono::steady_clock::now();
 
-  dfs_ = DFS_2(work_, cells, 10000, 25);
+  dfs_ = DFS(work_, cells, 10000, 25);
   size_t sci, sni;
   GetStartCellIndex(cells, start_pt_, start_x, sci, sni);
   // Stop();
@@ -205,7 +205,7 @@ void Route_2::PlanWithRotation(std::vector<Point> &path, std::vector<WaypointTyp
   GetLineNums(path, types, line_nums);
   for (auto &pt : path)
   {
-    pt = TF_2::Rotate(pt, center, -rotation_);
+    pt = TF::Rotate(pt, center, -rotation_);
     pt = Point(pt.x() + origin_pt_.x(), pt.y() + origin_pt_.y());
   }
   auto t5 = std::chrono::steady_clock::now();
@@ -222,9 +222,9 @@ void Route_2::PlanWithRotation(std::vector<Point> &path, std::vector<WaypointTyp
   std::cout << " ***************** Total cost: " << 1000 * elapsed5.count() << " ms ***************** " << std::endl;
 }
 
-void Route_2::GetLineNums(const std::vector<Point> &       path,
-                          const std::vector<WaypointType> &types,
-                          std::vector<int> &               line_nums)
+void CPP_2D::GetLineNums(const std::vector<Point> &       path,
+                         const std::vector<WaypointType> &types,
+                         std::vector<int> &               line_nums)
 {
   line_nums.clear();
 

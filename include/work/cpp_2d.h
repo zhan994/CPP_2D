@@ -1,5 +1,5 @@
 /**
- * \file route_2.h
+ * \file route.h
  * \author Zhihao Zhan (zhanzhihao_dt@163.com)
  * \brief 2d航线规划接口
  * \version 0.1
@@ -9,21 +9,21 @@
  *
  */
 
-#ifndef WORK_ROUTE_2_H
-#define WORK_ROUTE_2_H
+#ifndef WORK_CPP_2D_H
+#define WORK_CPP_2D_H
 
-#include "cell_2.h"
-#include "dfs_2.h"
+#include "cell.h"
+#include "dfs.h"
 
 #include <iostream>
 
-class Route_2 {
+class CPP_2D {
   public:
   /**
    * \brief 构造
    *
    */
-  Route_2();
+  CPP_2D();
 
   /**
    * \brief 设置工作地块
@@ -60,9 +60,7 @@ class Route_2 {
    * \param zones
    * \param out
    */
-  void DivideTracksIntoCells(std::vector<Segment> &          tracks,
-                             const std::vector<Trapezoid_2> &zones,
-                             std::vector<Cell_2> &           out);
+  void DivideTracksIntoCells(std::vector<Segment> &tracks, const std::vector<Trapezoid> &zones, std::vector<Cell> &out);
 
   /**
    * \brief pivotoal candi
@@ -82,7 +80,7 @@ class Route_2 {
    * \param snii
    */
   void GetStartCellIndex(
-      const std::vector<Cell_2> &cells, const Point &start_point, double start_x, size_t &sci, size_t &sni);
+      const std::vector<Cell> &cells, const Point &start_point, double start_x, size_t &sci, size_t &sni);
 
   /**
    * \brief 计算编号
@@ -95,9 +93,9 @@ class Route_2 {
 
   std::vector<Point>              outline_;
   std::vector<std::vector<Point>> holes_;
-  Work_2                          work_;
+  Work                            work_;
   Point                           origin_pt_;
-  DFS_2                           dfs_;
+  DFS                             dfs_;
 
   Point  start_pt_;
   double rotation_;
@@ -105,4 +103,4 @@ class Route_2 {
   double offset_;
 };
 
-#endif // WORK_ROUTE_2_H
+#endif // WORK_CPP_2D_H

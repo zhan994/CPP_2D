@@ -1,5 +1,5 @@
 /**
- * \file cell_2.h
+ * \file cell.h
  * \author Zhihao Zhan (zhanzhihao_dt@163.com)
  * \brief A cell represents a group of tracks.
  * \version 0.1
@@ -9,18 +9,18 @@
  *
  */
 
-#ifndef WORK_CELL_2_H
-#define WORK_CELL_2_H
+#ifndef WORK_CELL_H
+#define WORK_CELL_H
 
-#include "work_2.h"
+#include "workspace.h"
 
-class Cell_2 {
+class Cell {
   public:
   /**
    * \brief 构造
    *
    */
-  Cell_2();
+  Cell();
 
   /**
    * \brief 添加航线
@@ -63,7 +63,7 @@ class Cell_2 {
    * \param work
    * \param simplified
    */
-  void GetPaths(Work_2 &work, bool simplified = false);
+  void GetPaths(Work &work, bool simplified = false);
 
   /**
    * \brief 计算路径
@@ -73,9 +73,9 @@ class Cell_2 {
    * \param from_up
    * \param simplified
    *
-   * \return std::vector<Point_2>
+   * \return std::vector<Point>
    */
-  std::vector<Point> GetPaths(Work_2 &work, bool from_left, bool from_up, bool simplified = false);
+  std::vector<Point> GetPaths(Work &work, bool from_left, bool from_up, bool simplified = false);
 
   std::vector<Segment>            tracks_, sorted_tracks_;
   std::vector<std::vector<Point>> paths_;
@@ -92,4 +92,4 @@ class Cell_2 {
   bool  single_pt_state_;
 };
 
-#endif // WORK_CELL_2_H
+#endif // WORK_CELL_H

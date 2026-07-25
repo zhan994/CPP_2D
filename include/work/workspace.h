@@ -1,5 +1,5 @@
 /**
- * \file work_2.h
+ * \file work.h
  * \author Zhihao Zhan (zhanzhihao_dt@163.com)
  * \brief 2d 工作区
  * \version 0.1
@@ -9,10 +9,10 @@
  *
  */
 
-#ifndef WORK_WORK_2_H
-#define WORK_WORK_2_H
+#ifndef WORK_WORKSPACE_H
+#define WORK_WORKSPACE_H
 
-#include "geometry/utility_2.h"
+#include "geometry/utility.h"
 
 #include <iostream>
 #include <chrono>
@@ -35,9 +35,9 @@ typedef boost::property_map<Graph, boost::edge_weight_t>::type EdgeWeights;
 
 enum WaypointType { NORMAL_START, NORMAL_END, TRANSITION, DETOUR };
 
-class Trapezoid_2 {
+class Trapezoid {
   public:
-  Trapezoid_2(const Polygon &p, const Segment &left, const Segment &right);
+  Trapezoid(const Polygon &p, const Segment &left, const Segment &right);
 
   Polygon polygon_;
   Segment left_, right_;
@@ -45,13 +45,13 @@ class Trapezoid_2 {
   bool    left_state_, right_state_; // 起点和终点一致则为false
 };
 
-class Work_2 {
+class Work {
   public:
   /**
    * \brief 空构造
    *
    */
-  Work_2();
+  Work();
 
   /**
    * \brief 设置区域数据
@@ -113,7 +113,7 @@ class Work_2 {
    * \param interval 间隔
    * \param offset 起始偏置
    * \param out　输出tracks
-   * 
+   *
    * \return double 起始航线x坐标
    */
   double GetTracks(const Point &start_pt, double interval, double offset, std::vector<Segment> &out);
@@ -124,7 +124,7 @@ class Work_2 {
    * \param start_point 起点
    * \param out 输出
    */
-  void GetMonotoneZones(const Point &start_pt, std::vector<Trapezoid_2> &out);
+  void GetMonotoneZones(const Point &start_pt, std::vector<Trapezoid> &out);
 
   private:
   /**
@@ -207,4 +207,4 @@ class Work_2 {
   std::unordered_map<std::string, Vertex> graph_map_;
 };
 
-#endif // WORK_WORK_2_H
+#endif // WORK_WORKSPACE_H

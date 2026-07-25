@@ -1,7 +1,7 @@
-#include "geometry/buffer_2.h"
+#include "geometry/buffer.h"
 #include <iostream>
 
-Segment Buffer_2::Shrink(const Segment &seg)
+Segment Buffer::Shrink(const Segment &seg)
 {
   Point src = seg.first;
   Point tgt = seg.second;
@@ -19,7 +19,7 @@ Segment Buffer_2::Shrink(const Segment &seg)
   return Segment(new_src, new_tgt);
 }
 
-bool Buffer_2::Shrink(const Polygon &pg, Polygon &out)
+bool Buffer::Shrink(const Polygon &pg, Polygon &out)
 {
   bg::strategy::buffer::join_miter                 join_strategy;
   bg::strategy::buffer::distance_symmetric<double> distance_strategy(-1e-3);
@@ -41,7 +41,7 @@ bool Buffer_2::Shrink(const Polygon &pg, Polygon &out)
   return !ret.empty();
 }
 
-void Buffer_2::BBox(const Polygon &pg, std::vector<double> &bbox)
+void Buffer::BBox(const Polygon &pg, std::vector<double> &bbox)
 {
   Box ret;
   bg::envelope(pg, ret);

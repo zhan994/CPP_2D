@@ -1,5 +1,5 @@
 /**
- * \file vis_2.h
+ * \file vis.h
  * \author Zhihao Zhan (zhanzhihao_dt@163.com)
  * \brief 2d几何可视化
  * \version 0.1
@@ -9,19 +9,19 @@
  *
  */
 
-#ifndef VISUALIZATION_GEOMETRY_VIS_2_H
-#define VISUALIZATION_GEOMETRY_VIS_2_H
+#ifndef VISUALIZATION_VIS_H
+#define VISUALIZATION_VIS_H
 
-#include "geometry/utility_2.h"
+#include "geometry/utility.h"
 
 #include <iostream>
 #include <fstream>
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 
-class Vis_2 {
+class Vis {
   public:
-  Vis_2(std::string prefix = "./test");
+  Vis(std::string prefix = "./test");
 
   /**
    * \brief 新建数据
@@ -30,13 +30,13 @@ class Vis_2 {
    * \param data 数据
    * \param color 颜色
    */
-  void NewFile(std::string label, const Polygon &data, std::string color="black");
+  void NewFile(std::string label, const Polygon &data, std::string color = "black");
 
-  void NewFile(std::string label, const std::vector<Polygon> &data, std::string color="red");
+  void NewFile(std::string label, const std::vector<Polygon> &data, std::string color = "red");
 
-  void NewFile(std::string label, const std::vector<Segment> &data, std::string color="yellow");
+  void NewFile(std::string label, const std::vector<Segment> &data, std::string color = "yellow");
 
-  void NewFile(std::string label, const std::vector<Point> &data, std::string color="blue");
+  void NewFile(std::string label, const std::vector<Point> &data, std::string color = "blue");
 
   /**
    * \brief 清空数据
@@ -85,4 +85,4 @@ class Vis_2 {
   std::string              prefix_;
 };
 
-#endif // VISUALIZATION_GEOMETRY_VIS_2_H
+#endif // VISUALIZATION_VIS_H
