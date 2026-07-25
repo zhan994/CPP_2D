@@ -1,9 +1,9 @@
-#include "work/dfs_2.h"
+#include "work/dfs.h"
 
-DFS_2::DFS_2()
+DFS::DFS()
 {}
 
-DFS_2::DFS_2(const Work_2 &work, const std::vector<Cell_2> &cells, int max_cost, int cells_threshold)
+DFS::DFS(const Work &work, const std::vector<Cell> &cells, int max_cost, int cells_threshold)
     : work_(work),
       cells_(cells),
       N_(cells.size()),
@@ -17,13 +17,13 @@ DFS_2::DFS_2(const Work_2 &work, const std::vector<Cell_2> &cells, int max_cost,
   best_path_.clear();
 }
 
-int DFS_2::NumNodes(size_t ci)
+int DFS::NumNodes(size_t ci)
 {
-  Cell_2 cell = cells_[ci];
+  Cell cell = cells_[ci];
   return cell.NumNodes();
 }
 
-double DFS_2::GetWeight(size_t ci1, size_t ni1, size_t ci2, size_t ni2)
+double DFS::GetWeight(size_t ci1, size_t ni1, size_t ci2, size_t ni2)
 {
   double ret;
 
@@ -41,7 +41,7 @@ double DFS_2::GetWeight(size_t ci1, size_t ni1, size_t ci2, size_t ni2)
   return ret;
 }
 
-double DFS_2::ComputeWeight(size_t ci1, size_t ni1, size_t ci2, size_t ni2)
+double DFS::ComputeWeight(size_t ci1, size_t ni1, size_t ci2, size_t ni2)
 {
   std::vector<Point> paths_end1, paths_end2;
   cells_[ci1].GetPathEnd(ni1, paths_end1);
@@ -55,15 +55,15 @@ double DFS_2::ComputeWeight(size_t ci1, size_t ni1, size_t ci2, size_t ni2)
   // note: <opti> time cost due to complex cells
   bool simplified = N_ > cells_threshold_;
   path_len = simplified ? bg::distance(node1_end, node2_start) : work_.ShortestPath(node1_end, node2_start, path);
-  // std::cout << ci1 << " " << ni1 << ", " << ci2 << " " << ni2 << ", " << String_2::PointToString(node1_end) << " "
-  //           << String_2::PointToString(node2_start) << ", " << path_len << std::endl;
+  // std::cout << ci1 << " " << ni1 << ", " << ci2 << " " << ni2 << ", " << String::PointToString(node1_end) << " "
+  //           << String::PointToString(node2_start) << ", " << path_len << std::endl;
   // std::cout << "Path: " << std::endl;
-  // for (const auto &pt : path) std::cout << String_2::PointToString(pt) << std::endl;
+  // for (const auto &pt : path) std::cout << String::PointToString(pt) << std::endl;
 
   return path_len;
 }
 
-void DFS_2::FindMinimunPath(
+void DFS::FindMinimunPath(
     size_t sci, size_t sni, double interval, std::vector<Point> &path_out, std::vector<WaypointType> &wp_types_out)
 {
   cost_                 = 0;
@@ -73,7 +73,7 @@ void DFS_2::FindMinimunPath(
 
   std::pair<size_t, size_t>              scn_pair(sci, sni);
   std::vector<std::pair<size_t, size_t>> path = {scn_pair};
-  DFS(sci, sni, path, 0);
+  DFS_Search(sci, sni, path, 0);
 
   // std::cout << best_solution_weight_ << std::endl;
   // for (const auto &s : best_path_) std::cout << s.first << " " << s.second << std::endl;
@@ -81,7 +81,7 @@ void DFS_2::FindMinimunPath(
   TranslatePath(interval, path_out, wp_types_out);
 }
 
-void DFS_2::DFS(size_t cur_ci, size_t cur_ni, std::vector<std::pair<size_t, size_t>> &path, double current_weight)
+void DFS::DFS_Search(size_t cur_ci, size_t cur_ni, std::vector<std::pair<size_t, size_t>> &path, double current_weight)
 {
   if (cost_ >= max_cost_)
     return;
@@ -131,14 +131,14 @@ void DFS_2::DFS(size_t cur_ci, size_t cur_ni, std::vector<std::pair<size_t, size
       std::pair<size_t, size_t> cn_pair(next_ci, next_ni);
       visited_[next_ci] = true;
       path.push_back(cn_pair);
-      DFS(next_ci, next_ni, path, new_weight);
+      DFS_Search(next_ci, next_ni, path, new_weight);
       path.pop_back();
       visited_[next_ci] = false;
     }
   }
 }
 
-void DFS_2::TranslatePath(double interval, std::vector<Point> &path_out, std::vector<WaypointType> &wp_types_out)
+void DFS::TranslatePath(double interval, std::vector<Point> &path_out, std::vector<WaypointType> &wp_types_out)
 {
   double total_length = 0.0, total_connect_length = 0.0;
   path_out.clear();
@@ -228,9 +228,9 @@ void DFS_2::TranslatePath(double interval, std::vector<Point> &path_out, std::ve
   return;
 }
 
-std::string DFS_2::GetCellConnectionType(const std::vector<Point> &cur_path,
-                                         const std::vector<Point> &next_path,
-                                         double                    interval)
+std::string DFS::GetCellConnectionType(const std::vector<Point> &cur_path,
+                                       const std::vector<Point> &next_path,
+                                       double                    interval)
 {
   Point p1 = cur_path[cur_path.size() - 2];
   Point p2 = cur_path[cur_path.size() - 1];

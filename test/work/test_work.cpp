@@ -1,5 +1,5 @@
 /**
- * \file test_work_2.cpp
+ * \file test_work.cpp
  * \author Zhihao Zhan (zhanzhihao_dt@163.com)
  * \brief 2d 工作区相关功能测试
  * \version 0.1
@@ -9,15 +9,15 @@
  *
  */
 
-#include "work/work_2.h"
-#include "visualization/vis_2.h"
+#include "work/workspace.h"
+#include "visualization/vis.h"
 
 int main()
 {
   std::cout << " ================== 1. Work ================== " << std::endl;
-  std::shared_ptr<Vis_2> vis_ptr = std::make_shared<Vis_2>();
+  std::shared_ptr<Vis> vis_ptr = std::make_shared<Vis>();
 
-  Work_2                          work;
+  Work work;
   // std::vector<Point>              outline = {Point(0., 0.),  Point(10., 0.),  Point(10., 5.), Point(8., 7.),
   //                               Point(10., 8.), Point(10., 10.), Point(5., 13.), Point(0., 10.)};
   // std::vector<std::vector<Point>> holes   = {{Point(2., 4.), Point(2., 6.), Point(8., 6.), Point(8., 4.)},
@@ -105,7 +105,6 @@ int main()
        Point(13389014.109912237, 3877589.3556478913), Point(13389007.783931786, 3877591.5840472323)}};
   Point start_pt(13220709.655, 3760420.094);
 
-
   Point offset_pt = outline[0];
   for (auto &pt : outline) pt = Point(pt.x() - offset_pt.x(), pt.y() - offset_pt.y());
   for (auto &hole : holes)
@@ -119,11 +118,11 @@ int main()
   double offset   = -0.1682206309629235;
   work.RotateIt(rotation);
   Point center = work.GetCenter();
-  start_pt    = TF_2::Rotate(start_pt, center, rotation);
+  start_pt     = TF::Rotate(start_pt, center, rotation);
 
   std::vector<Segment> tracks;
   work.GetTracks(start_pt, interval, offset, tracks);
-  std::vector<Trapezoid_2> zones;
+  std::vector<Trapezoid> zones;
   work.GetMonotoneZones(start_pt, zones);
   std::cout << zones.size() << std::endl;
   std::vector<Polygon> zones_pg;
@@ -135,7 +134,7 @@ int main()
   // std::vector<Segment> path_segs;
   // for (size_t i = 0; i < path.size() - 1; ++i)
   // {
-  //   std::cout << String_2::PointToString(path[i]) << std::endl;
+  //   std::cout << String::PointToString(path[i]) << std::endl;
   //   path_segs.push_back(Segment(path[i], path[i + 1]));
   // }
 
@@ -212,7 +211,7 @@ int main()
     }
     path.push_back(vertices[v]);
     std::reverse(path.begin(), path.end());
-    for (const auto &pt : path) std::cout << String_2::PointToString(pt) << " -> ";
+    for (const auto &pt : path) std::cout << String::PointToString(pt) << " -> ";
     std::cout << std::endl;
 
     // boost::clear_vertex(v1, g);

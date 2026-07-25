@@ -1,6 +1,6 @@
-#include "geometry/tf_2.h"
+#include "geometry/tf.h"
 
-Point TF_2::Rotate(const Point &pt, const Point &center, double angle)
+Point TF::Rotate(const Point &pt, const Point &center, double angle)
 {
   Point pt0, pt1, pt2;
 
@@ -17,7 +17,7 @@ Point TF_2::Rotate(const Point &pt, const Point &center, double angle)
   return pt2;
 }
 
-Segment TF_2::Rotate(const Segment &seg, const Point &center, double angle)
+Segment TF::Rotate(const Segment &seg, const Point &center, double angle)
 {
   Segment seg0, seg1, seg2;
 
@@ -34,7 +34,7 @@ Segment TF_2::Rotate(const Segment &seg, const Point &center, double angle)
   return seg2;
 }
 
-Polygon TF_2::Rotate(const Polygon &pg, const Point &center, double angle)
+Polygon TF::Rotate(const Polygon &pg, const Point &center, double angle)
 {
   Polygon pg0, pg1, pg2;
 

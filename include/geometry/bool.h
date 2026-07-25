@@ -1,5 +1,5 @@
 /**
- * \file bool_2.h
+ * \file bool.h
  * \author Zhihao Zhan (zhanzhihao_dt@163.com)
  * \brief 2d几何的布尔运算
  * \version 0.1
@@ -9,12 +9,12 @@
  *
  */
 
-#ifndef GEOMETRY_BOOL_2_H
-#define GEOMETRY_BOOL_2_H
+#ifndef GEOMETRY_BOOL_H
+#define GEOMETRY_BOOL_H
 
 #include "bg.h"
 
-class Bool_2 {
+class Bool {
   public:
   /**
    * \brief 线段之间的交集
@@ -54,32 +54,32 @@ class Bool_2 {
 
   /**
    * \brief pg1 + pg2
-   * 
-   * \param pg1 
-   * \param pg2 
-   * \param out 
+   *
+   * \param pg1
+   * \param pg2
+   * \param out
    */
   static void Union(const Polygon &pg1, const Polygon &pg2, std::vector<Polygon> &out);
 
   /**
    * \brief 线段是否被多边形包含，包括在边上
-   * 
-   * \param seg 
-   * \param pg 
-   * \return true 
-   * \return false 
+   *
+   * \param seg
+   * \param pg
+   * \return true
+   * \return false
    */
-  static bool CoveredBy(const Segment& seg, const Polygon& pg);
+  static bool CoveredBy(const Segment &seg, const Polygon &pg);
 
   /**
    * \brief 线段是否被多边形包含，不包括在边上
-   * 
-   * \param seg 
-   * \param pg 
-   * \return true 
-   * \return false 
+   *
+   * \param seg
+   * \param pg
+   * \return true
+   * \return false
    */
-  static bool Within(const Segment& seg, const Polygon& pg);
+  static bool Within(const Segment &seg, const Polygon &pg);
 };
 
-#endif // GEOMETRY_BOOL_2_H
+#endif // GEOMETRY_BOOL_H

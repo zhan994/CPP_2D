@@ -1,9 +1,9 @@
-#include "work/cell_2.h"
+#include "work/cell.h"
 
-Cell_2::Cell_2() : single_pt_state_(false)
+Cell::Cell() : single_pt_state_(false)
 {}
 
-void Cell_2::AddTrack(const Segment &track)
+void Cell::AddTrack(const Segment &track)
 {
   if (single_pt_state_)
     return;
@@ -11,15 +11,15 @@ void Cell_2::AddTrack(const Segment &track)
   tracks_.push_back(track);
 }
 
-void Cell_2::SortTracks()
+void Cell::SortTracks()
 {
   sorted_tracks_ = tracks_;
-  std::sort(sorted_tracks_.begin(), sorted_tracks_.end(), Utility_2::CompSegment);
+  std::sort(sorted_tracks_.begin(), sorted_tracks_.end(), Utility::CompSegment);
   // std::cout << sorted_tracks_.size() << std::endl;
-  // for (const auto &t : sorted_tracks_) std::cout << String_2::SegmentToString(t) << std::endl;
+  // for (const auto &t : sorted_tracks_) std::cout << String::SegmentToString(t) << std::endl;
 }
 
-int Cell_2::NumNodes()
+int Cell::NumNodes()
 {
   if (single_pt_state_)
   {
@@ -33,7 +33,7 @@ int Cell_2::NumNodes()
   }
 }
 
-void Cell_2::SetSinglePoint(const Point &pt)
+void Cell::SetSinglePoint(const Point &pt)
 {
   single_pt_       = pt;
   single_pt_state_ = true;
@@ -45,12 +45,12 @@ void Cell_2::SetSinglePoint(const Point &pt)
   waypoint_types_ = {{WaypointType::TRANSITION}};
 }
 
-void Cell_2::GetPathEnd(size_t ni, std::vector<Point> &out)
+void Cell::GetPathEnd(size_t ni, std::vector<Point> &out)
 {
   out = {paths_[ni].front(), paths_[ni].back()};
 }
 
-std::vector<Point> Cell_2::GetPaths(Work_2 &work, bool from_left, bool from_up, bool simplified)
+std::vector<Point> Cell::GetPaths(Work &work, bool from_left, bool from_up, bool simplified)
 {
   std::vector<Segment> merged_tracks;
   for (size_t i = 0; i < sorted_tracks_.size(); ++i)
@@ -61,7 +61,7 @@ std::vector<Point> Cell_2::GetPaths(Work_2 &work, bool from_left, bool from_up, 
       merged_tracks.push_back(track);
     } else
     {
-      merged_tracks.back() = Utility_2::MergeVerticalSegments(merged_tracks.back(), track);
+      merged_tracks.back() = Utility::MergeVerticalSegments(merged_tracks.back(), track);
     }
   }
 
@@ -123,7 +123,7 @@ std::vector<Point> Cell_2::GetPaths(Work_2 &work, bool from_left, bool from_up, 
   return ret_path;
 }
 
-void Cell_2::GetPaths(Work_2 &work, bool simplified)
+void Cell::GetPaths(Work &work, bool simplified)
 {
   if (tracks_.size() == 1)
   {

@@ -1,5 +1,5 @@
 /**
- * \file utility_2.h
+ * \file utility.h
  * \author Zhihao Zhan (zhanzhihao_dt@163.com)
  * \brief 2d 几何接口
  * \version 0.1
@@ -12,12 +12,12 @@
 #ifndef GEOMERY_UTILITY_H
 #define GEOMERY_UTILITY_H
 
-#include "string_2.h"
-#include "tf_2.h"
-#include "buffer_2.h"
-#include "bool_2.h"
+#include "string.h"
+#include "tf.h"
+#include "buffer.h"
+#include "bool.h"
 
-class Utility_2 {
+class Utility {
   public:
   /**
    * \brief 合并垂直方向上的两条线段
@@ -57,10 +57,10 @@ class Utility_2 {
 
   /**
    * \brief double保留小数
-   * 
-   * \param dval 
-   * \param n 
-   * \return double 
+   *
+   * \param dval
+   * \param n
+   * \return double
    */
   static double DRound(double dval, int n);
 };

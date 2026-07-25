@@ -17,36 +17,36 @@ aux_source_directory(src/work WORK_SRC)
 
 
 ###################### VIS #######################
-add_library(vis_2 SHARED 
-  src/visualization/vis_2.cpp
+add_library(vis SHARED 
+  src/visualization/vis.cpp
 )
 
-target_link_libraries(vis_2 
+target_link_libraries(vis 
   ${Boost_LIBRARIES}
 )
 
-set_target_properties(vis_2 
+set_target_properties(vis 
   PROPERTIES 
-  VERSION 1.3 
+  VERSION 1.4
   SOVERSION 1
 )
 
 
 ###################### PLAN #######################
-add_library(planning_2 SHARED 
+add_library(cpp_2d SHARED 
   ${WORK_SRC}
   ${GEOM_UTILITY_SRC}
 )
 
 # protobuf need pthread
-target_link_libraries(planning_2
+target_link_libraries(cpp_2d
   ${Boost_LIBRARIES}
   pthread 
 )
 
-set_target_properties(planning_2 
+set_target_properties(cpp_2d 
   PROPERTIES 
-  VERSION 1.3 
+  VERSION 1.4
   SOVERSION 1
 )
 
@@ -62,8 +62,8 @@ if(EXISTS ${PROJECT_SOURCE_DIR}/lib AND IS_DIRECTORY ${PROJECT_SOURCE_DIR}/lib)
 endif()
 
 install(TARGETS
-  vis_2
-  planning_2
+  vis
+  cpp_2d
   DESTINATION ${PROJECT_SOURCE_DIR}/lib
 )
 
@@ -78,71 +78,71 @@ install(DIRECTORY
 )
 
 ###################### TEST #######################
-# test geom.tf_2
-add_executable(test_geometry_tf_2
-  test/geometry/test_tf_2.cpp
+# test geom.tf
+add_executable(test_geometry_tf
+  test/geometry/test_tf.cpp
   ${GEOM_UTILITY_SRC}
 )
 
-target_link_libraries(test_geometry_tf_2
+target_link_libraries(test_geometry_tf
   ${Boost_LIBRARIES}
 )
 
 
-# test geom.buffer_2
-add_executable(test_geometry_buffer_2
-  test/geometry/test_buffer_2.cpp
+# test geom.buffer
+add_executable(test_geometry_buffer
+  test/geometry/test_buffer.cpp
   ${GEOM_UTILITY_SRC}
 )
 
-target_link_libraries(test_geometry_buffer_2
+target_link_libraries(test_geometry_buffer
   ${Boost_LIBRARIES}
-  vis_2
+  vis
 )
 
-# test geom.bool_2
-add_executable(test_geometry_bool_2
-  test/geometry/test_bool_2.cpp
+# test geom.bool
+add_executable(test_geometry_bool
+  test/geometry/test_bool.cpp
   ${GEOM_UTILITY_SRC}
 )
 
-target_link_libraries(test_geometry_bool_2
+target_link_libraries(test_geometry_bool
   ${Boost_LIBRARIES}
-  vis_2
+  vis
 )
 
-# test geom.utility_2
-add_executable(test_geometry_utility_2
-  test/geometry/test_utility_2.cpp
+# test geom.utility
+add_executable(test_geometry_utility
+  test/geometry/test_utility.cpp
   ${GEOM_UTILITY_SRC}
 )
 
-target_link_libraries(test_geometry_utility_2
+target_link_libraries(test_geometry_utility
   ${Boost_LIBRARIES}
-  vis_2
+  vis
 )
 
-# test work.work_2
-add_executable(test_work_work_2
-  test/work/test_work_2.cpp
+# test work.work
+add_executable(test_work_work
+  test/work/test_work.cpp
   ${WORK_SRC}
   ${GEOM_UTILITY_SRC}
 )
 
-target_link_libraries(test_work_work_2
+target_link_libraries(test_work_work
   ${Boost_LIBRARIES}
-  vis_2
+  vis
 )
 
 
-# test work.route_2
-add_executable(test_work_route_2
-  test/work/test_route_2.cpp
+# test work.cpp_2d
+add_executable(test_work_cpp_2d
+  test/work/test_cpp_2d.cpp
   ${WORK_SRC}
   ${GEOM_UTILITY_SRC}
 )
 
-target_link_libraries(test_work_route_2
+target_link_libraries(test_work_cpp_2d
   ${Boost_LIBRARIES}
-  vis_2
+  vis
 )

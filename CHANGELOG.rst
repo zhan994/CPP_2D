@@ -8,7 +8,7 @@ Changelog for package planning_cpp
 
 1.1.0 (2023-06-15)
 ------------------
-* Fix bug: result of "Buffer_2::Shrink Polygon" is empty 
+* Fix bug: result of "Buffer::Shrink Polygon" is empty 
 * Add "Utility::DRound" interface to control double precision
 * Optimize dijkstra search graph due to "remove_vertex"
 * Add "planning.proto" interface
@@ -24,3 +24,7 @@ Changelog for package planning_cpp
 * Optimize time cost due to complex areas
 * Optimize the method about how to choose the start cell 
 * Free redundant time cost due to reprecessing initial data
+
+1.4.0 (2026-07-25)
+------------------
+* Refactor the code structure

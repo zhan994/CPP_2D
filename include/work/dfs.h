@@ -1,7 +1,7 @@
 /**
- * \file dfs_2.h
+ * \file dfs.h
  * \author Zhihao Zhan (zhanzhihao_dt@163.com)
- * \brief 基于 Work_2 和 Cell_2 的 DFS
+ * \brief 基于 Work 和 Cell 的 DFS
  * \version 0.1
  * \date 2023-06-12
  *
@@ -9,18 +9,18 @@
  *
  */
 
-#ifndef WORK_DFS_2_H
-#define WORK_DFS_2_H
+#ifndef WORK_DFS_H
+#define WORK_DFS_H
 
-#include "cell_2.h"
+#include "cell.h"
 
-class DFS_2 {
+class DFS {
   public:
   /**
    * \brief Construct a new dfs 2 object
    *
    */
-  DFS_2();
+  DFS();
 
   /**
    * \brief 构造
@@ -30,7 +30,7 @@ class DFS_2 {
    * \param max_cost
    * \param cells_threshold
    */
-  DFS_2(const Work_2 &work, const std::vector<Cell_2> &cells, int max_cost, int cells_threshold);
+  DFS(const Work &work, const std::vector<Cell> &cells, int max_cost, int cells_threshold);
 
   /**
    * \brief 求最优路径
@@ -84,7 +84,7 @@ class DFS_2 {
    * \param path
    * \param current_weight
    */
-  void DFS(size_t cur_ci, size_t cur_ni, std::vector<std::pair<size_t, size_t>> &path, double current_weight);
+  void DFS_Search(size_t cur_ci, size_t cur_ni, std::vector<std::pair<size_t, size_t>> &path, double current_weight);
 
   /**
    * \brief 解析最终输出
@@ -107,11 +107,11 @@ class DFS_2 {
                                     const std::vector<Point> &next_path,
                                     double                    interval);
 
-  Work_2              work_;
-  std::vector<Cell_2> cells_;
-  int                 N_, cells_threshold_;
-  int                 max_cost_, cost_;
-  std::vector<bool>   visited_;
+  Work              work_;
+  std::vector<Cell> cells_;
+  int               N_, cells_threshold_;
+  int               max_cost_, cost_;
+  std::vector<bool> visited_;
 
   // key: ci1:ni1_ci2:ni2,  val: dist btw. ci1:ni1 & ci2:ni2
   std::unordered_map<std::string, double> edge_weights_;
@@ -122,4 +122,4 @@ class DFS_2 {
   std::vector<std::pair<size_t, size_t>> best_path_;
 };
 
-#endif // WORK_DFS_2_H
+#endif // WORK_DFS_H

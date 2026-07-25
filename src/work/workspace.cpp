@@ -1,6 +1,6 @@
-#include "work/work_2.h"
+#include "work/workspace.h"
 
-Trapezoid_2::Trapezoid_2(const Polygon &p, const Segment &left, const Segment &right)
+Trapezoid::Trapezoid(const Polygon &p, const Segment &left, const Segment &right)
     : polygon_(p), left_(left), right_(right)
 {
   left_state_  = !bg::equals(left.first, left.second);
@@ -9,14 +9,14 @@ Trapezoid_2::Trapezoid_2(const Polygon &p, const Segment &left, const Segment &r
   right_x_     = right_.first.x();
 }
 
-Work_2::Work_2()
+Work::Work()
 {
-  std::cout << " Create Work_2 Object." << std::endl;
+  std::cout << " Create Work Object." << std::endl;
 }
 
-void Work_2::SetPolygon(const std::vector<Point> &outline, const std::vector<std::vector<Point>> &holes)
+void Work::SetPolygon(const std::vector<Point> &outline, const std::vector<std::vector<Point>> &holes)
 {
-  work_pg_ = Utility_2::SetData(outline);
+  work_pg_ = Utility::SetData(outline);
   for (const auto &h : holes) AddHole(h);
 
   bg::centroid(work_pg_, centroid_);
@@ -26,7 +26,7 @@ void Work_2::SetPolygon(const std::vector<Point> &outline, const std::vector<std
   // all_pts_id_.clear();
   // all_pts_.insert(all_pts_.end(), work_pg_.outer().begin(), work_pg_.outer().end());
   // for (const auto &inner : work_pg_.inners()) all_pts_.insert(all_pts_.end(), inner.begin(), inner.end());
-  // for (const auto &pt : all_pts_) all_pts_id_.push_back(String_2::PointToString(pt));
+  // for (const auto &pt : all_pts_) all_pts_id_.push_back(String::PointToString(pt));
 
   // outline_segs_.clear();
   // holes_segs_.clear();
@@ -52,26 +52,26 @@ void Work_2::SetPolygon(const std::vector<Point> &outline, const std::vector<std
   // InitGraph();
 }
 
-void Work_2::AddHole(const std::vector<Point> &hole)
+void Work::AddHole(const std::vector<Point> &hole)
 {
-  Polygon hole_pg = Utility_2::SetData(hole);
+  Polygon hole_pg = Utility::SetData(hole);
   if (bg::intersects(work_pg_, hole_pg))
   {
     std::vector<Polygon> new_work_pgs;
-    Bool_2::Difference(work_pg_, hole_pg, new_work_pgs);
+    Bool::Difference(work_pg_, hole_pg, new_work_pgs);
     work_pg_ = new_work_pgs.front();
   }
 }
 
-void Work_2::RotateIt(double angle)
+void Work::RotateIt(double angle)
 {
-  work_pg_ = TF_2::Rotate(work_pg_, centroid_, angle);
+  work_pg_ = TF::Rotate(work_pg_, centroid_, angle);
 
   all_pts_.clear();
   all_pts_id_.clear();
   all_pts_.insert(all_pts_.end(), work_pg_.outer().begin(), work_pg_.outer().end());
   for (const auto &inner : work_pg_.inners()) all_pts_.insert(all_pts_.end(), inner.begin(), inner.end());
-  for (const auto &pt : all_pts_) all_pts_id_.push_back(String_2::PointToString(pt));
+  for (const auto &pt : all_pts_) all_pts_id_.push_back(String::PointToString(pt));
 
   outline_segs_.clear();
   holes_segs_.clear();
@@ -97,7 +97,7 @@ void Work_2::RotateIt(double angle)
   InitGraph();
 }
 
-void Work_2::RegisterMap()
+void Work::RegisterMap()
 {
   size_t num_edges = work_pg_.outer().size() - 1;
   for (size_t i = 0; i < num_edges; ++i)
@@ -106,7 +106,7 @@ void Work_2::RegisterMap()
     size_t edge0 = i == 0 ? num_edges - 1 : i - 1;
     size_t edge1 = i;
 
-    std::string pt_str    = String_2::PointToString(pt);
+    std::string pt_str    = String::PointToString(pt);
     std::string edge0_str = "<0," + std::to_string(edge0) + ">";
     std::string edge1_str = "<0," + std::to_string(edge1) + ">";
     if (registered_pts_map_.find(pt_str) == registered_pts_map_.end())
@@ -129,7 +129,7 @@ void Work_2::RegisterMap()
       size_t edge0 = j == 0 ? num_edges - 1 : j - 1;
       size_t edge1 = j;
 
-      std::string pt_str    = String_2::PointToString(pt);
+      std::string pt_str    = String::PointToString(pt);
       std::string edge0_str = "<" + std::to_string(i + 1) + "," + std::to_string(edge0) + ">";
       std::string edge1_str = "<" + std::to_string(i + 1) + "," + std::to_string(edge1) + ">";
       if (registered_pts_map_.find(pt_str) == registered_pts_map_.end())
@@ -145,7 +145,7 @@ void Work_2::RegisterMap()
 
   if (0)
   {
-    std::cout << " [Debug] =====================> Work_2::RegisterMap" << std::endl;
+    std::cout << " [Debug] =====================> Work::RegisterMap" << std::endl;
     for (const auto &kv : registered_pts_map_)
     {
       for (const auto &e : kv.second)
@@ -156,7 +156,7 @@ void Work_2::RegisterMap()
   }
 }
 
-void Work_2::Register(const std::string &pt_str, const std::string &edge_str)
+void Work::Register(const std::string &pt_str, const std::string &edge_str)
 {
   if (registered_pts_map_.find(pt_str) == registered_pts_map_.end())
   {
@@ -167,7 +167,7 @@ void Work_2::Register(const std::string &pt_str, const std::string &edge_str)
   }
 }
 
-void Work_2::InitGraph()
+void Work::InitGraph()
 {
   graph_ = Graph();
   graph_map_.clear();
@@ -194,9 +194,9 @@ void Work_2::InitGraph()
   graph_bak_ = graph_;
 }
 
-bool Work_2::ValidPtsPair(const Point &pt1, const Point &pt2)
+bool Work::ValidPtsPair(const Point &pt1, const Point &pt2)
 {
-  std::string pair_id = String_2::PointToString(pt1) + "_" + String_2::PointToString(pt2);
+  std::string pair_id = String::PointToString(pt1) + "_" + String::PointToString(pt2);
   bool        val;
   if (registered_pts_pairs_.find(pair_id) != registered_pts_pairs_.end())
   {
@@ -209,7 +209,7 @@ bool Work_2::ValidPtsPair(const Point &pt1, const Point &pt2)
     } else
     {
       Segment seg(pt1, pt2);
-      val = Bool_2::Within(Buffer_2::Shrink(seg), work_pg_);
+      val = Bool::Within(Buffer::Shrink(seg), work_pg_);
     }
     registered_pts_pairs_[pair_id] = val;
   }
@@ -217,10 +217,10 @@ bool Work_2::ValidPtsPair(const Point &pt1, const Point &pt2)
   return val;
 }
 
-bool Work_2::PointsOnSameEdge(const Point &pt1, const Point &pt2)
+bool Work::PointsOnSameEdge(const Point &pt1, const Point &pt2)
 {
-  std::string pt1_str = String_2::PointToString(pt1);
-  std::string pt2_str = String_2::PointToString(pt2);
+  std::string pt1_str = String::PointToString(pt1);
+  std::string pt2_str = String::PointToString(pt2);
   if (registered_pts_map_.find(pt1_str) != registered_pts_map_.end() &&
       registered_pts_map_.find(pt2_str) != registered_pts_map_.end())
   {
@@ -251,7 +251,7 @@ bool Work_2::PointsOnSameEdge(const Point &pt1, const Point &pt2)
   return false;
 }
 
-double Work_2::ShortestPath(const Point &start, const Point &end, std::vector<Point> &path)
+double Work::ShortestPath(const Point &start, const Point &end, std::vector<Point> &path)
 {
   if (ValidPtsPair(start, end))
   {
@@ -259,7 +259,7 @@ double Work_2::ShortestPath(const Point &start, const Point &end, std::vector<Po
     return bg::distance(start, end);
   }
 
-  std::string start_id  = String_2::PointToString(start);
+  std::string start_id  = String::PointToString(start);
   bool        add_start = false;
   if (std::find(all_pts_id_.begin(), all_pts_id_.end(), start_id) == all_pts_id_.end())
   {
@@ -277,7 +277,7 @@ double Work_2::ShortestPath(const Point &start, const Point &end, std::vector<Po
     }
   }
 
-  std::string end_id  = String_2::PointToString(end);
+  std::string end_id  = String::PointToString(end);
   bool        add_end = false;
   if (std::find(all_pts_id_.begin(), all_pts_id_.end(), end_id) == all_pts_id_.end())
   {
@@ -307,7 +307,7 @@ double Work_2::ShortestPath(const Point &start, const Point &end, std::vector<Po
   return dist;
 }
 
-double Work_2::Dijkstra(const std::string &start_id, const std::string &end_id, std::vector<Point> &path)
+double Work::Dijkstra(const std::string &start_id, const std::string &end_id, std::vector<Point> &path)
 {
   // store predecessor vertex
   std::vector<Vertex> v_predecessor(boost::num_vertices(graph_));
@@ -336,10 +336,10 @@ double Work_2::Dijkstra(const std::string &start_id, const std::string &end_id, 
   return v_distance[end_vertex];
 }
 
-double Work_2::GetTracks(const Point &start_pt, double interval, double offset, std::vector<Segment> &out)
+double Work::GetTracks(const Point &start_pt, double interval, double offset, std::vector<Segment> &out)
 {
   std::vector<double> bbox;
-  Buffer_2::BBox(work_pg_, bbox);
+  Buffer::BBox(work_pg_, bbox);
   double x_min = bbox[0];
   double y_min = bbox[1];
   double x_max = bbox[2];
@@ -370,12 +370,12 @@ double Work_2::GetTracks(const Point &start_pt, double interval, double offset, 
         if (bg::intersects(cur_seg, seg))
         {
           std::vector<Point> pts;
-          Bool_2::Intersection(cur_seg, seg, pts);
+          Bool::Intersection(cur_seg, seg, pts);
 
           Point pt = pts.front();
           intersections_y.push_back(pt.y());
           std::string seg_str = "<0," + std::to_string(i) + ">";
-          Register(String_2::PointToString(pt), seg_str);
+          Register(String::PointToString(pt), seg_str);
         }
       }
     }
@@ -394,12 +394,12 @@ double Work_2::GetTracks(const Point &start_pt, double interval, double offset, 
           if (bg::intersects(cur_seg, seg))
           {
             std::vector<Point> pts;
-            Bool_2::Intersection(cur_seg, seg, pts);
+            Bool::Intersection(cur_seg, seg, pts);
 
             Point pt = pts.front();
             intersections_y.push_back(pt.y());
             std::string seg_str = "<" + std::to_string(i + 1) + "," + std::to_string(j) + ">";
-            Register(String_2::PointToString(pt), seg_str);
+            Register(String::PointToString(pt), seg_str);
           }
         }
       }
@@ -409,8 +409,8 @@ double Work_2::GetTracks(const Point &start_pt, double interval, double offset, 
     for (size_t i = 0; i < intersections_y.size() - 1; ++i)
     {
       Segment seg(Point(cur_x, intersections_y[i]), Point(cur_x, intersections_y[i + 1]));
-      Segment shrink_seg = Buffer_2::Shrink(seg);
-      if (Bool_2::Within(shrink_seg, work_pg_))
+      Segment shrink_seg = Buffer::Shrink(seg);
+      if (Bool::Within(shrink_seg, work_pg_))
         tracks.push_back(seg);
     }
 
@@ -430,7 +430,7 @@ double Work_2::GetTracks(const Point &start_pt, double interval, double offset, 
       out.push_back(track);
     } else
     {
-      out.back() = Utility_2::MergeVerticalSegments(out.back(), track);
+      out.back() = Utility::MergeVerticalSegments(out.back(), track);
     }
   }
 
@@ -440,12 +440,12 @@ double Work_2::GetTracks(const Point &start_pt, double interval, double offset, 
   return start_x;
 }
 
-void Work_2::GetMonotoneZones(const Point &start_pt, std::vector<Trapezoid_2> &out)
+void Work::GetMonotoneZones(const Point &start_pt, std::vector<Trapezoid> &out)
 {
   std::vector<Segment> sweep_lines;
   VerticalSweepLines(start_pt, sweep_lines);
 
-  std::vector<std::vector<Trapezoid_2>> trapezoids;
+  std::vector<std::vector<Trapezoid>> trapezoids;
   for (size_t i = 0; i < sweep_lines.size() - 1; ++i)
   {
     Segment left_line  = sweep_lines[i];
@@ -460,8 +460,8 @@ void Work_2::GetMonotoneZones(const Point &start_pt, std::vector<Trapezoid_2> &o
       if (left_inter_state && right_inter_state)
       {
         std::vector<Point> left_inter_pts, right_inter_pts;
-        Bool_2::Intersection(left_line, seg, left_inter_pts);
-        Bool_2::Intersection(right_line, seg, right_inter_pts);
+        Bool::Intersection(left_line, seg, left_inter_pts);
+        Bool::Intersection(right_line, seg, right_inter_pts);
         legs_data.push_back(Segment(left_inter_pts.front(), right_inter_pts.front()));
       }
     }
@@ -469,11 +469,11 @@ void Work_2::GetMonotoneZones(const Point &start_pt, std::vector<Trapezoid_2> &o
     // note: <fix> legs_data empty
     if (legs_data.empty())
       continue;
-    std::sort(legs_data.begin(), legs_data.end(), Utility_2::CompSegment);
+    std::sort(legs_data.begin(), legs_data.end(), Utility::CompSegment);
     // std::cout << "debug leg" << std::endl;
-    // for (const auto leg : legs_data) std::cout << String_2::SegmentToString(leg) << std::endl;
+    // for (const auto leg : legs_data) std::cout << String::SegmentToString(leg) << std::endl;
 
-    std::vector<Trapezoid_2> trapezoid_col;
+    std::vector<Trapezoid> trapezoid_col;
     for (size_t j = 0; j < legs_data.size() - 1; ++j)
     {
       Segment down_leg = legs_data[j];
@@ -488,11 +488,11 @@ void Work_2::GetMonotoneZones(const Point &start_pt, std::vector<Trapezoid_2> &o
       bg::correct(pg);
 
       Polygon shrink_pg;
-      if (Buffer_2::Shrink(pg, shrink_pg))
+      if (Buffer::Shrink(pg, shrink_pg))
       {
         if (bg::within(shrink_pg, work_pg_))
         {
-          Trapezoid_2 trapezoid(pg, Segment(down_leg.first, up_leg.first), Segment(down_leg.second, up_leg.second));
+          Trapezoid trapezoid(pg, Segment(down_leg.first, up_leg.first), Segment(down_leg.second, up_leg.second));
           trapezoid_col.push_back(trapezoid);
         }
       }
@@ -503,15 +503,15 @@ void Work_2::GetMonotoneZones(const Point &start_pt, std::vector<Trapezoid_2> &o
 
   for (size_t i = 0; i < trapezoids.size() - 1; ++i)
   {
-    std::vector<Trapezoid_2> &left_col  = trapezoids[i];
-    std::vector<Trapezoid_2> &right_col = trapezoids[i + 1];
+    std::vector<Trapezoid> &left_col  = trapezoids[i];
+    std::vector<Trapezoid> &right_col = trapezoids[i + 1];
     for (const auto &left : left_col)
     {
       bool merge = false;
       for (auto &right : right_col)
       {
-        // std::cout << "*********************** judge" << String_2::SegmentToString(left.right_) << " "
-        //           << String_2::SegmentToString(right.left_) << " " << left.right_state_
+        // std::cout << "*********************** judge" << String::SegmentToString(left.right_) << " "
+        //           << String::SegmentToString(right.left_) << " " << left.right_state_
         //           << bg::equals(left.right_, right.left_) << std::endl;
         if (left.right_state_ && bg::equals(left.right_, right.left_))
         {
@@ -522,7 +522,7 @@ void Work_2::GetMonotoneZones(const Point &start_pt, std::vector<Trapezoid_2> &o
             right.left_state_ = left.left_state_;
 
             std::vector<Polygon> union_pgs;
-            Bool_2::Union(left.polygon_, right.polygon_, union_pgs);
+            Bool::Union(left.polygon_, right.polygon_, union_pgs);
             right.polygon_ = union_pgs.front();
             merge          = true;
             break;
@@ -536,7 +536,7 @@ void Work_2::GetMonotoneZones(const Point &start_pt, std::vector<Trapezoid_2> &o
   for (const auto &right : trapezoids.back()) out.push_back(right);
 }
 
-void Work_2::VerticalSweepLines(const Point &start_pt, std::vector<Segment> &out)
+void Work::VerticalSweepLines(const Point &start_pt, std::vector<Segment> &out)
 {
   std::vector<double> v_x;
   v_x.push_back(start_pt.x());
@@ -550,7 +550,7 @@ void Work_2::VerticalSweepLines(const Point &start_pt, std::vector<Segment> &out
   std::sort(v_x.begin(), v_x.end());
 
   std::vector<double> bbox;
-  Buffer_2::BBox(work_pg_, bbox);
+  Buffer::BBox(work_pg_, bbox);
   double y_min = bbox[1];
   double y_max = bbox[3];
   for (const auto &x : v_x) out.push_back(Segment(Point(x, y_min - 1), Point(x, y_max + 1)));
